@@ -1,5 +1,5 @@
 # biometry
-Yıldız Technical University Biometry Lesson
+Yıldız Technical University Biometry Class
 
 # Details
 Python version 3.6.4
