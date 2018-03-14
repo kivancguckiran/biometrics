@@ -1,5 +1,5 @@
 # biometrics
-Yıldız Technical University Biometry Class
+Yıldız Technical University Biometrics Class
 
 # Details
 Python version 3.6.4
