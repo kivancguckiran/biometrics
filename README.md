@@ -1,4 +1,4 @@
-# biometry
+# biometrics
 Yıldız Technical University Biometry Class
 
 # Details
