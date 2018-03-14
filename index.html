@@ -487,7 +487,21 @@
           <div class="row">
             <div class="col-sm-12">
               <p>
-                
+                Just by looking at the results, we can say adaptive thresholding is very performative, but leaves a lot of <i>pepper</i> to deal with.
+                Also Otsu and Custom thresholds have good results. But I don't think these would be reliable without properly filtering out the regional blackness or whiteness.
+                Maybe just for my fingerprint image, we can easily choose one, but for a broad analysis we will be needing a better approach
+              </p>
+              <p>
+                I've noticed from some researchs and codebases, there are 6 steps for fingerprint enhancement:
+                <ul>
+                    <li>Normalization</li>
+                    <li>Segmentation</li>
+                    <li>Finding Orientation</li>
+                    <li>Frequency Analysis</li>
+                    <li>Filtering(Gabor)</li>
+                    <li>Thinning/Skeletonization</li>
+                </ul>
+                I will try to apply these steps one-by-one, with each of the results shown.
               </p>
             </div>
           </div>
