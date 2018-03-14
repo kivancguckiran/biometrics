@@ -20,4 +20,4 @@ python step3.py
 
 ## About
 This github repository is for archiving and serving the homeworks via HTML.
-https://kivancguckiran.github.io/biometry/
+https://kivancguckiran.github.io/biometrics/
