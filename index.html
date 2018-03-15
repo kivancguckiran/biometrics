@@ -5,7 +5,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-    <title>Biometry</title>
+    <title>Biometrics</title>
   </head>
   <body>
     <!-- Navigation -->
@@ -492,19 +492,110 @@
                 Maybe just for my fingerprint image, we can easily choose one, but for a broad analysis we will be needing a better approach
               </p>
               <p>
-                I've noticed from some researchs and codebases, there are 6 steps for fingerprint enhancement:
-                <ul>
-                    <li>Normalization</li>
-                    <li>Segmentation</li>
-                    <li>Finding Orientation</li>
-                    <li>Frequency Analysis</li>
-                    <li>Filtering(Gabor)</li>
-                    <li>Thinning/Skeletonization</li>
-                </ul>
-                I will try to apply these steps one-by-one, with each of the results shown.
+                I have found a project which greatly achieves enhancing, will try to understand the code and achieve similar results with my implementation.
+                Source is: <a href="https://github.com/Utkarsh-Deshmukh/Fingerprint-Enhancement-Python">Fingerprint-Enhancement-Python</a>
+              </p>
+              <p>
+                <b>Masking and Normalization</b>
+              </p>
+              <p>
+                First step is the segmentation and getting the mask and normalized image.
+                Image is normalized the standard deviation is calculated within convolved blocks.
+                Low threshold is applied to the standard deviated image, and we got the mask.
+                Image is normalized with the masked image again to achieve a better region of image.
+              </p>
+              <p>
+                <div class="row">
+                  <div class="col-sm-3" style="text-align: center;">
+                    Original
+                    <img class="img-fluid" alt="Original" title="Original" src="fingerprint.bmp">
+                  </div>
+                  <div class="col-sm-3" style="text-align: center;">
+                    Normalized
+                    <img class="img-fluid" alt="Normalized Image" title="Normalized Image" src="step5/norm.bmp">
+                  </div>
+                  <div class="col-sm-3" style="text-align: center;">
+                    Mask
+                    <img class="img-fluid" alt="Mask" title="Mask" src="step5/mask.bmp">
+                  </div>
+                </div>
+              </p>
+              <p>
+                <b>Orientation</b>
+              </p>
+              <p>
+                Orientation is achieved via convolving gaussian kernels over the image.
+                First image gradient is calculated. Then, weighted summation with blocks is applied.
+                Principal direction is calculated and Sine and Cosine of the doubled angles achieved.
+                We see from the image that the direction differential is based on the middle of the image.
+                After that sharp difference, it can be noticed that orientation goes circular.
+              </p>
+              <p>
+                  <img class="img-fluid" alt="Orientation" title="Orientation" src="step5/orient.bmp">
+              </p>
+              <p>
+                <b>Frequency analysis and Gabor Filter</b>
+              </p>
+              <p>
+                We find the overall ridge frequency of the image.
+                For each block, we find the mean orientation within.
+                Then, blocks spatial frequency of the block is calculated.
+                We only use the mean frequency of the calculated frequency distribution.
+              </p>
+              <p>
+                So far we have orientation, mean frequency and the normalized image.
+                We can apply the gabor filter now.
+              </p>
+              <p>
+                  <div class="row">
+                    <div class="col-sm-3" style="text-align: center;">
+                      Frequency distribution
+                      <img class="img-fluid" alt="Frequency" title="Frequency" src="step5/freq.bmp">
+                    </div>
+                    <div class="col-sm-3" style="text-align: center;">
+                      Gabor kernel(without rotation)
+                      <img style="width: 100%;" alt="Gabor kernel" title="Gabor kernel" src="step5/gabor_kernel.bmp">
+                    </div>
+                    <div class="col-sm-3" style="text-align: center;">
+                      Gabor Filtered Image
+                      <img class="img-fluid" alt="Gabor Filtered Image" title="Gabor Filtered Image" src="step5/gabor.bmp">
+                    </div>
+                    <div class="col-sm-3" style="text-align: center;">
+                      Skeletonized
+                      <img class="img-fluid" alt="Skeletonized" title="Skeletonized" src="step5/skel.bmp">
+                    </div>
+                  </div>
+              </p>
+              <p>
+                  Skeletonized image seems nearly perfect now.
+                  Though, there are some circles on the lines.
+                  Let's apply opening, closing and gaussian before the processing.
+              </p>
+              <p>
+                  <img class="img-fluid" alt="Skeletonized" title="Skeletonized" src="step6/skel.bmp">
+              </p>
+              <p>
+                  This is so much better.
               </p>
             </div>
           </div>
+          <hr />
+          <h5 id="res"><i class="fa fa-caret-right"></i> &nbsp; Results and Further Research</h5>
+          <br />
+          <p>
+            As it can be clearly seen from the skeletonized images, the enhancement approeach of 
+            <a href="https://github.com/Utkarsh-Deshmukh/Fingerprint-Enhancement-Python">Fingerprint-Enhancement-Python</a> of the fingerprint image is way better the my basic approachs.
+            Even though there are some <i>lines-pepper</i> within the image, it still outperforms the basic approachs with the <i>not connected</i> ridges.
+          </p>
+          <p>
+              It can be said that the Gabor Filter is the defacto operation for the fingerprint enhancement process.
+              Also, preprocessing the image before the filter, improves the result greatly.
+              Further research must be done to eliminate unconnected <i>lines-pepper</i>.
+              I will look into it in the mean time.
+          </p>
+          <p>
+            Last image will be my base fingerprint image for the upcoming homeworks.
+            </p>
         </div><!-- card-body -->
       </div><!-- card col-lg-8 -->
       <div class="col-lg-3 p-0 mt-4">
@@ -520,6 +611,7 @@
             <a href="#binary" class="list-group-item list-group-item-action">Binarization</a>
             <a href="#skel" class="list-group-item list-group-item-action">Skeletonization</a>
             <a href="#eval" class="list-group-item list-group-item-action">Evaluation</a>
+            <a href="#res" class="list-group-item list-group-item-action">Results and Further Research</a>
           </div>
         </div><!-- card -->
       </div><!-- col-lg-3 -->
