@@ -17,7 +17,7 @@ saveImageFile(orientImage, 'step5/orient.bmp')
 freqImage, meanFreq = applyFrequency(normImage, mask, orientImage, 24, 5, 5, 15)
 saveImageFile(freqImage, 'step5/freq.bmp')
 
-gaborKernel, gaboredImage = applyGaborFilter(normImage, orientImage, meanFreq * mask, 0.5, 0.5)
+gaborKernel, gaboredImage = applyGaborFilter(normImage, orientImage, meanFreq * mask, 0.75, 0.75)
 saveImageFile(gaborKernel, 'step5/gabor_kernel.bmp')
 saveImageFile(gaboredImage, 'step5/gabor.bmp')
 
