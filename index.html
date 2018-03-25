@@ -15,7 +15,7 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="index.html">HW-1</a>
+            <!-- <a class="nav-link" href="index.html">HW-1</a> -->
           </li>
         </ul><!-- navbar-nav -->
       </div><!-- collapse -->
@@ -24,7 +24,7 @@
     <div class="row justify-content-between no-gutters">
       <div class="col-9 mt-4">
         <div class="card-body">
-          <h4 class="card-title">Homework-1</h4>
+          <h4 class="card-title">Assignment</h4>
           <hr>
           <p>
             This homework is for the Biometrics class in Yildiz Technical University .
@@ -595,7 +595,33 @@
               I will look into it in the mean time.
           </p>
           <p>
-            Last image will be my base fingerprint image for the upcoming homeworks.
+            Last image will be my base fingerprint image for the upcoming weeks.
+          </p>
+          <hr />
+          <h5 id="res"><i class="fa fa-caret-right"></i> &nbsp; Minutiae Extraction</h5>
+          <br />
+          <p>
+            Since we have the filtered, skeletonized fingerprint image, we can extract the features of the fingerprint, which they are called minutiae.
+            I will attempt to find 2 types of minutiae which are <i>ridge bifurcation</i> and </i>ridge ending</i>.
+          </p>
+          <p>
+              For minutiae extraction, the widely available method is crossing number method.
+              It is done by evaluating each pixel and check for a connection to the corresping pixel.
+              <ul>
+                <li>If there is one pixel, that's a ridge ending, meaning the line ends at that pixel.</li>
+                <li>If there are two pixels, that's a normal continuiation of the line.</li>
+                <li>If there are three pixels, that's a bifurcation, meaning the line splits in two.</li>
+              </ul>
+              I evaluated the method for our purpose from <a href="https://github.com/rtshadow/biometrics" target="_blank">Source</a>.
+              The bifurcations are marked with green, and the ridge endings are marked with red.
+          </p>
+          <p>
+              <img class="img-fluid" alt="Minutiae Extracted" title="Minutiae Extracted" src="step7/minutiae.png">
+          </p>
+          <p>
+            As it can be clearly seen, there are ridge endings at every line ending.
+            But the ending points of the fingerprint image should be filtered out, because they are not a unique feature.
+            <!-- TODO -->
           </p>
         </div><!-- card-body -->
       </div><!-- card col-lg-8 -->
@@ -613,6 +639,7 @@
             <a href="#skel" class="list-group-item list-group-item-action">Skeletonization</a>
             <a href="#eval" class="list-group-item list-group-item-action">Evaluation</a>
             <a href="#res" class="list-group-item list-group-item-action">Results and Further Research</a>
+            <a href="#minutiae" class="list-group-item list-group-item-action">Minutiae Extraction</a>
           </div>
         </div><!-- card -->
       </div><!-- col-lg-3 -->

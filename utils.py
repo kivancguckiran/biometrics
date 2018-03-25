@@ -4,12 +4,16 @@ from os import listdir
 from scipy import misc, ndimage, signal
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.patches as patches
 from skimage.color import rgb2gray
 from skimage.filters import median, gaussian, threshold_otsu, threshold_local, rank
 from skimage.morphology import opening, closing, erosion, dilation, thin, skeletonize, medial_axis
 from skimage.exposure import equalize_hist
 from skimage.util import invert
 
+MINUTIAE_RIDGE_NONE = 0
+MINUTIAE_RIDGE_BIFURCATION = 1
+MINUTIAE_RIDGE_ENDING = 2
 
 def applyMean(image, selem):
     return rank.mean(image, selem)
@@ -265,3 +269,41 @@ def applyGaborFilter(image, orientImage, frequency, kx, ky):
         newim[r][c] = np.sum(img_block * gabor_filter[int(orientindex[r][c]) - 1])
 
     return (reffilter, np.asarray(newim < -3, dtype=int))
+
+def checkMinutiae(pixels, i, j):
+    cells = [(-1, -1), (-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1), (0, -1), (-1, -1)]
+    values = [pixels[i + k][j + l] for k, l in cells]
+
+    crossings = 0
+    for k in range(0, 8):
+        crossings += abs(values[k] - values[k + 1])
+    crossings /= 2
+
+    result = MINUTIAE_RIDGE_NONE
+
+    if pixels[i][j] == 1:
+        if crossings == 1:
+            result = MINUTIAE_RIDGE_ENDING
+        if crossings == 3:
+            result = MINUTIAE_RIDGE_BIFURCATION
+
+    return result
+
+def extracMinutiaeToFile(img, filename):
+    inverted = np.asarray(np.invert(img) / 255, dtype=int)
+    fig, ax = plt.subplots(1)
+    ax.imshow(img, cmap='gray')
+    x, y = inverted.shape
+
+    colors = {MINUTIAE_RIDGE_ENDING : 'r', MINUTIAE_RIDGE_BIFURCATION : 'g'}
+
+    ellipse_size = 4
+    for i in range(1, x - 1):
+        for j in range(1, y - 1):
+            minutiae = checkMinutiae(inverted, i, j)
+            if minutiae != MINUTIAE_RIDGE_NONE:
+                ellipse = patches.Circle((j, i), ellipse_size, color=colors[minutiae], fill=False)
+                ax.add_patch(ellipse)
+
+    plt.savefig(filename, bbox_inches='tight')
+
