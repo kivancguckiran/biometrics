@@ -5,9 +5,10 @@ from scipy import misc, ndimage, signal
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-from skimage.color import rgb2gray
+from skimage.draw import circle_perimeter, set_color
+from skimage.color import rgb2gray, gray2rgb
 from skimage.filters import median, gaussian, threshold_otsu, threshold_local, rank
-from skimage.morphology import opening, closing, erosion, dilation, thin, skeletonize, medial_axis
+from skimage.morphology import opening, closing, erosion, dilation, thin, skeletonize, medial_axis, binary_erosion, binary_dilation, square
 from skimage.exposure import equalize_hist
 from skimage.util import invert
 
@@ -289,21 +290,40 @@ def checkMinutiae(pixels, i, j):
 
     return result
 
-def extracMinutiaeToFile(img, filename):
+def extractMinutiae(img):
     inverted = np.asarray(np.invert(img) / 255, dtype=int)
-    fig, ax = plt.subplots(1)
-    ax.imshow(img, cmap='gray')
     x, y = inverted.shape
+    minutiaeList = list()
 
-    colors = {MINUTIAE_RIDGE_ENDING : 'r', MINUTIAE_RIDGE_BIFURCATION : 'g'}
-
-    ellipse_size = 4
     for i in range(1, x - 1):
         for j in range(1, y - 1):
             minutiae = checkMinutiae(inverted, i, j)
             if minutiae != MINUTIAE_RIDGE_NONE:
-                ellipse = patches.Circle((j, i), ellipse_size, color=colors[minutiae], fill=False)
-                ax.add_patch(ellipse)
+                minutiaeList.append({'type': minutiae, 'coordinates': [i, j]})
 
-    plt.savefig(filename, bbox_inches='tight')
+    return minutiaeList
+
+def markMinutiae(img, minutiaeList):
+    image = gray2rgb(img)
+    radius = 4
+    colors = {MINUTIAE_RIDGE_ENDING : [255, 0, 0], MINUTIAE_RIDGE_BIFURCATION : [0, 255, 0]}
+
+    for minutiae in minutiaeList:
+        i, j = minutiae['coordinates']
+        rr, cc = circle_perimeter(i, j, radius)
+        set_color(image, (rr, cc), colors[minutiae['type']])
+
+    return image
+
+def applyMaskToMinutiaeList(msk, minutiaeList):
+    mask = np.asarray(msk / 255, dtype=int)
+    paddedMask = np.asarray(binary_erosion(mask, square(35)), dtype=int)
+    newMinutiaeList = list()
+
+    for minutiae in minutiaeList:
+        i, j = minutiae['coordinates']
+        if paddedMask[i, j] == 1:
+            newMinutiaeList.append(minutiae)
+
+    return paddedMask, newMinutiaeList
 

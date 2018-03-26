@@ -616,12 +616,31 @@
               The bifurcations are marked with green, and the ridge endings are marked with red.
           </p>
           <p>
-              <img class="img-fluid" alt="Minutiae Extracted" title="Minutiae Extracted" src="step7/minutiae.png">
+              <img class="img-fluid" alt="Minutiae Extracted" title="Minutiae Extracted" src="step7/all_minutiae.bmp">
           </p>
           <p>
             As it can be clearly seen, there are ridge endings at every line ending.
             But the ending points of the fingerprint image should be filtered out, because they are not a unique feature.
-            <!-- TODO -->
+          </p>
+          <p>
+            The mask used before to filter out the image will be used again.
+            But this time binary erosion will be applied to eliminate some outer white pixels.
+            With this approach we can filter out the unwanted ridge endings by checking each minutiae that if it resides in the mask.
+          </p>
+          <p>
+            <div class="row">
+              <div class="col-sm-3" style="text-align: center;">
+                New mask
+                <img class="img-fluid" alt="Mask" title="Mask" src="step7/new_mask.bmp">
+              </div>
+              <div class="col-sm-3" style="text-align: center;">
+                Masked Minutiae
+                <img style="width: 100%;" alt="Masked Minutiae" title="Masked Minutiae" src="step7/masked_minutiae.bmp">
+              </div>
+            </div>
+            <p>
+              Even though we lost a bifurcation at the bottom-right of the fingerprint, the overall result is good.
+            </p>
           </p>
         </div><!-- card-body -->
       </div><!-- card col-lg-8 -->
