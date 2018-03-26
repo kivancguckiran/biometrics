@@ -540,7 +540,7 @@
               <p>
                 We find the overall ridge frequency of the image.
                 For each block, we find the mean orientation within.
-                Then, blocks spatial frequency of the block is calculated.
+                Then, spatial frequency of the blocks is calculated.
                 We only use the mean frequency of the calculated frequency distribution.
               </p>
               <p>
@@ -602,7 +602,7 @@
           <br />
           <p>
             Since we have the filtered, skeletonized fingerprint image, we can extract the features of the fingerprint, which they are called minutiae.
-            I will attempt to find 2 types of minutiae which are <i>ridge bifurcation</i> and </i>ridge ending</i>.
+            I will attempt to find 2 types of minutiae which are <i>ridge bifurcation</i> and <i>ridge ending</i>.
           </p>
           <p>
               For minutiae extraction, the widely available method is crossing number method.
@@ -612,7 +612,7 @@
                 <li>If there are two pixels, that's a normal continuiation of the line.</li>
                 <li>If there are three pixels, that's a bifurcation, meaning the line splits in two.</li>
               </ul>
-              I evaluated the method for our purpose from <a href="https://github.com/rtshadow/biometrics" target="_blank">Source</a>.
+              I evaluated the method for our purpose from <a href="https://github.com/rtshadow/biometrics" target="_blank">biometrics</a>.
               The bifurcations are marked with green, and the ridge endings are marked with red.
           </p>
           <p>
