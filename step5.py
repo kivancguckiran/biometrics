@@ -1,5 +1,5 @@
 import numpy as np
-from utils import openImageFile, saveImageFile, applySegmentation, applyOrientation, applyFrequency, applyGaborFilter, applySkeletonization
+from utils import openImageFile, saveImageFile, applySegmentation, applyOrientation, applyFrequency, applyGaborFilter, applyThinning
 from skimage.morphology import skeletonize
 from skimage.util import invert
 
@@ -20,5 +20,5 @@ gaborKernel, gaboredImage = applyGaborFilter(normImage, orientImage, meanFreq * 
 saveImageFile(gaborKernel, 'step5/gabor_kernel.bmp')
 saveImageFile(gaboredImage, 'step5/gabor.bmp')
 
-thinnedImage = np.asarray(invert(skeletonize(gaboredImage)), dtype=int)
+thinnedImage = applyThinning(gaboredImage)
 saveImageFile(thinnedImage, 'step5/skel.bmp')
