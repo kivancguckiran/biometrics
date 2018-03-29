@@ -7,7 +7,6 @@ image = openImageFile('fingerprint.bmp')
 
 # Assigned block size, which is divisive of 288 and 384
 normImage, mask = applySegmentation(image, 12, 0.1)
-
 saveImageFile(normImage, 'step5/norm.bmp')
 saveImageFile(np.asarray(mask, dtype=int), 'step5/mask.bmp')
 

@@ -11,6 +11,7 @@ from skimage.filters import median, gaussian, threshold_otsu, threshold_local, r
 from skimage.morphology import opening, closing, erosion, dilation, thin, skeletonize, medial_axis, binary_erosion, binary_dilation, square
 from skimage.exposure import equalize_hist
 from skimage.util import invert
+import json
 
 MINUTIAE_RIDGE_NONE = 0
 MINUTIAE_RIDGE_BIFURCATION = 1
@@ -55,12 +56,10 @@ def applyAdaptiveThreshold(image, blockSize, offset):
     return binarized
 
 def applyThinning(image):
-    inverted = invert(image / 255)
-    return np.asarray(invert(thin(inverted)), dtype=int)
+    return np.asarray(invert(thin(image)), dtype=int)
 
 def applySkeletonization(image):
-    inverted = invert(image / 255)
-    return np.asarray(invert(skeletonize(inverted)), dtype=int)
+    return np.asarray(invert(skeletonize(image)), dtype=int)
 
 def applyMedialAxis(image):
     inverted = invert(image / 255)
@@ -291,7 +290,8 @@ def checkMinutiae(pixels, i, j):
     return result
 
 def extractMinutiae(img):
-    inverted = np.asarray(np.invert(img) / 255, dtype=int)
+    inverted = 1 - img
+
     x, y = inverted.shape
     minutiaeList = list()
 
@@ -305,8 +305,9 @@ def extractMinutiae(img):
 
 def markMinutiae(img, minutiaeList):
     image = gray2rgb(img)
+
     radius = 4
-    colors = {MINUTIAE_RIDGE_ENDING : [255, 0, 0], MINUTIAE_RIDGE_BIFURCATION : [0, 255, 0]}
+    colors = {MINUTIAE_RIDGE_ENDING : [1, 0, 0], MINUTIAE_RIDGE_BIFURCATION : [0, 1, 0]}
 
     for minutiae in minutiaeList:
         i, j = minutiae['coordinates']
@@ -315,8 +316,7 @@ def markMinutiae(img, minutiaeList):
 
     return image
 
-def applyMaskToMinutiaeList(msk, minutiaeList):
-    mask = np.asarray(msk / 255, dtype=int)
+def applyMaskToMinutiaeList(mask, minutiaeList):
     paddedMask = np.asarray(binary_erosion(mask, square(35)), dtype=int)
     newMinutiaeList = list()
 
@@ -327,3 +327,45 @@ def applyMaskToMinutiaeList(msk, minutiaeList):
 
     return paddedMask, newMinutiaeList
 
+def findOrientationOfEnding(image, x, y):
+    indexes = [[x - 1, y - 1],[x - 1, y],[x - 1, y + 1],[x, y - 1],[x, y + 1],[x + 1, y - 1],[x + 1, y],[x + 1, y + 1]]
+    angles = [315, 270, 225, 0, 180, 45, 90, 135]
+
+    minutiae = {}
+    it = 0
+    for index in indexes:
+        i, j = index
+        if image[i, j] == 0:
+            minutiae = {'type': MINUTIAE_RIDGE_ENDING, 'coordinates': [i, j], 'angle': angles[it]}
+        it += 1
+
+    return minutiae
+
+def findOrientationOfBifurcation(image, x, y):
+    minutiaeList = list()
+    indexes = [[x - 1, y - 1], [x - 1, y], [x - 1, y + 1], [x, y - 1], [x, y + 1], [x + 1, y - 1], [x + 1, y], [x + 1, y + 1]]
+    angles = [315, 270, 225, 0, 180, 45, 90, 135]
+
+    it = 0
+    for index in indexes:
+        i, j = index
+        if image[i, j] == 0:
+            minutiaeList.append({'type': MINUTIAE_RIDGE_BIFURCATION, 'coordinates': [i, j], 'angle': angles[it]})
+        it += 1
+
+    return minutiaeList
+
+def getOrientationsOfMinutiae(minutiaeList, image):
+    newList = list()
+    for minutiae in minutiaeList:
+        i, j = minutiae['coordinates']
+        if minutiae['type'] == MINUTIAE_RIDGE_BIFURCATION:
+            newList.extend(findOrientationOfBifurcation(image, i , j))
+        else:
+            newList.append(findOrientationOfEnding(image, i , j))
+
+    return newList
+
+def putDictionaryToFile(dict, filename):
+    with open(filename, 'w') as file:
+        file.write(json.dumps(dict))
