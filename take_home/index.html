@@ -206,7 +206,7 @@
             From the table above in "1. c)" we can easily draw Error vs Threshold graph. Fail sample is excluded.
           </p>
           <p>
-            Plotting source is: <a target="_blank" href="https://github.com/kivancguckiran/biometrics/take_home/FARFRR.py">FARFRR.py</a>
+            Plotting source is: <a target="_blank" href="https://github.com/kivancguckiran/biometrics/blob/master/take_home/FARFRR.py">FARFRR.py</a>
           </p>
           <img src="farfrr.png" />
           <hr />
@@ -216,20 +216,72 @@
             ROC curve is acquired with using the FRR FAR table. Fail sample is excluded.
           </p>
           <p>
-            Plotting source is: <a target="_blank" href="https://github.com/kivancguckiran/biometrics/take_home/ROC.py">ROC.py</a>
+            Plotting source is: <a target="_blank" href="https://github.com/kivancguckiran/biometrics/blob/master/take_home/ROC.py">ROC.py</a>
           </p>
           <img src="roc.png" />
           <hr />
           <h5 id="2a"><i class="fa fa-caret-right"></i> &nbsp; 2. a) What is graphical password?</h5>
           <br />
+          <p>
+            Graphical password is, using a picture as an authentication method. This is the general definition of the term.
+            It is an alternative to the traditional text-based authentication system.
+            This password might consist a single image, sequence of images, individual parts inside image, or a region inside an image.
+            In addition to selecting, there are also drawing, writing methods.
+          </p>
           <hr />
           <h5 id="2b"><i class="fa fa-caret-right"></i> &nbsp; 2. b) What are the advantages using graphical password?</h5>
           <br />
+          <ul>
+            <li>Compared to text based methods, graphical passwords are easier to be remembered. This provides less login failures.</li>
+            <li>Its space is larger then text based method, since there are unlimited images, this provides protection to dictionary or brute force attacks.</li>
+            <li>Even a video recording of the graphical password entrance session is hard to decipher since mouse clicks cannot be seen.</li>
+            <li>Event a mouse click position logger would have a hard time deciphering the password.</li>
+            <li>It is safe from social engineering, since it's very hard to describe login process to another person.</li>
+          </ul>
           <hr />
           <h5 id="2c"><i class="fa fa-caret-right"></i> &nbsp; 2. c) Describe two ways in which a graphical authentication scheme can be implemented. You must explain with your own examples.</h5>
           <br />
+          <ul>
+            <li>
+              User may recall a pattern and choose images.
+              <ul>
+                <li>Let's say, "<b>Red axe</b> chopping down an <b>oak tree</b> near <b>river</b>".</li>
+                <li>First user may see images that contains, multi colored axes, hammers nails and etc.</li>
+                <li>After selecting a tool, user should select another image from images like bamboo trees, oak trees, houses, musical instruments and etc.</li>
+                <li>Last image may contain river, sun, mountain and etc.</li>
+              </ul>
+              This way, there would be immensive amount of possibilities of graphical passwords and it would be easy to remember for the user.
+            </li>
+            <li>
+              User may select fonts and words. This way there would be multiple strings with different fonts
+              <ul>
+                <li>Server provides distinctive exotic fonts to choose from.</li>
+                <li>User enters a sentence and choose a font for each word.</li>
+                <li>When user tries to login, server prompts with words with multiple fonts.</li>
+                <li>User selects words with the corresponding fonts accordingly.</li>
+              </ul>
+              This way, there would be 2 layer protection. One layer is text based and one layer is graphic based.
+            </li>
+          </ul>
           <hr />
           <h5 id="2d"><i class="fa fa-caret-right"></i> &nbsp; 2. d) What are disadvantages of using a graphical password?</h5>
+            <ul>
+              <li>Login time is longer than average text based login methods.</li>
+              <li>The server uses more memory since images contains more data compared to text.</li>
+              <li>People tend to use patterns, so it is vulnerable against guessing.</li>
+              <li>For drawing methods, login system might need new infrastructure like pen and board like stylus.</li>
+            </ul>
+          <br />
+          <hr />
+          <h5 id="hand"><i class="fa fa-caret-right"></i> &nbsp; Hand calculations</h5>
+          <p>
+            Click to enlarge.
+            <br />
+            <br />
+            <br />
+            <img onclick="window.open(this.src)" style="cursor: pointer; width: 300px; -ms-transform: rotate(90deg); -webkit-transform: rotate(90deg); transform: rotate(90deg);" src="el1.jpeg" />
+            <img onclick="window.open(this.src)" style="cursor: pointer; width: 300px; -ms-transform: rotate(90deg); -webkit-transform: rotate(90deg); transform: rotate(90deg);" src="el2.jpeg" />
+          </p>
           <br />
         </div><!-- card-body -->
       </div><!-- card col-lg-8 -->
@@ -250,6 +302,7 @@
             <a href="#2b" class="list-group-item list-group-item-action">What are the advantages using a graphical password?</a>
             <a href="#2c" class="list-group-item list-group-item-action">Describe two ways in which a graphical authentication scheme can be implemented.</a>
             <a href="#2d" class="list-group-item list-group-item-action">What are disadvantages of using a graphical password?</a>
+            <a href="#hand" class="list-group-item list-group-item-action">Hand calculations</a>
           </div>
         </div><!-- card -->
       </div><!-- col-lg-3 -->
